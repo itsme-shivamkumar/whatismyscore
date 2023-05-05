@@ -1,13 +1,33 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto&display=swap');
+/*
+font-family: 'Press Start 2P', cursive;
+font-family: 'Roboto', sans-serif;
+*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body{
+    background: linear-gradient(-45deg,#ff3d02,#e73c7e,#23a6d5,#23d5ab);
+    background-size: 200% 200%;
+    animation: gradient 10s ease infinite;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    color: whitesmoke;
+}
+@keyframes gradient {
+    0%{
+        background-position: 0% 50%;
+    }   
+    50%{
+        background-position: 100% 50%;
+    }           
+    100%{
+        background-position: 0% 50%;
+    }
+}
+.blurAll{
+    transition: filter 1s;
+    filter: blur(5px);
 }
