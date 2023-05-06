@@ -135,12 +135,14 @@ function App() {
   const checkForEdit=()=>{
     $(".subitem").on("click",(e)=>{
       let element=e.target.id;
-      let eleIndex=parseInt(element[element.length-1]);
+      console.log(element)
+      let eleIndex=parseInt(element.slice(7,element.length));
+      console.log(eleIndex)
       getOptionsReady("subitems",[eleIndex]);
       showEditPrompt(eleIndex);
     })
     $(".lower-btn").on("click",(e)=>{
-      if(prevCpi!==0.0 && prevTotalCredits!==0){
+      if(prevCpi!==0.0){
         calculateCpi();
       }
     })
