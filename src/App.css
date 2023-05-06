@@ -253,7 +253,7 @@ h1{
   cursor: pointer;
   font-size: 1.2rem;
 }
-#prev--sem--cpi--input{
+#prev--sem--cpi--input,#prev--sem--totalCreditPoints--input{
   justify-self: end;
   grid-column: 1/span 2;
   display: inline-block;
@@ -265,7 +265,7 @@ h1{
   font-size: large;
   font-weight: 600;
 }
-#prevCpi--btn{
+#prevCpi--btn,#prevCredit--btn{
   color: black;
   grid-column: 3/span 2;
   display: inline-block;
@@ -280,6 +280,9 @@ h1{
   font-weight: 600;
 }
 #prevCpi--btn:hover{
+  font-size: 1.2rem;
+}
+#prevCredit--btn:hover{
   font-size: 1.2rem;
 }
 #edit1{
@@ -360,7 +363,7 @@ h1{
   .options--item--headline,.options--item{
     font-size: smaller;
   }
-  #prevCpi--btn,#prev--sem--cpi--input{
+  #prevCpi--btn,#prev--sem--cpi--input,#prev--sem--totalCreditPoints--input,#prevCredit--btn{
     width: 80%;
   }
   #edit--btn,#delete--btn{

@@ -2,7 +2,8 @@ import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
-import obj from "./database";
+import {obj} from "./db/database";
+import {prevTotalCreditsOptions} from './db/database';
 function App() {
 
   const prevTotalCredits=useRef(0);
@@ -11,9 +12,6 @@ function App() {
   const branch= useRef("null");
   const semOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const branchOptions = ["ar","bme","bt","ca","che","civ","cse","ece","ele","it","me","min","mme"];
-  const prevTotalCreditsOptions = [
-    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-  ];
   const mainObj=useRef({});
   const pointToGrade={10:"O",9:"A",8:"B",7:"C",6:"D",5:"E",4:"F",3:"F",2:"F",1:"F",0:"F"}
   const gradeToPoint={"O":10,"A":9,"B":8,"C":7,"D":6,"E":5,"F":4};
@@ -71,6 +69,8 @@ function App() {
         $("#current--sem").html(`sem-${currSem.current}`);
         $(".options").fadeOut();
         $(".container").fadeIn().removeClass("blurAll");
+        prevTotalCredits.current=calculatePrevTC(branch.current,currSem.current);
+        $("#prev--total--credits").html(prevTotalCredits.current);
         if(flagFirst){
           setTimeout(()=>{
             showPrevCpiPrompt();
@@ -92,7 +92,7 @@ function App() {
         $(".container").fadeIn().removeClass("blurAll");
         if(flagFirst){
           setTimeout(() => {
-            showPrevSemTotalCreditsPrompt();
+            findObj();
           }, 1000);
         }
       })
@@ -102,10 +102,11 @@ function App() {
   const showPrevSemTotalCreditsPrompt=()=>{
     setTimeout(()=>{
       $(".container").addClass("blurAll").fadeOut();
-      getOptionsReady("prev--sem--total--credits", prevTotalCreditsOptions);
+      getOptionsReady("prev--sem--total--credits", []);
       $(".options").fadeIn();
-      $(".options--item").on("click",(e)=>{
-        prevTotalCredits.current=prevTotalCreditsOptions[parseInt(e.target.id)];
+      $("#prevCredit--btn").on("click",(e)=>{
+        let pc=$("#prev--sem--totalCreditPoints--input[name='pcii']").val();
+        if(parseInt(pc))prevTotalCredits.current=parseInt(pc);
         $("#prev--total--credits").html(`${prevTotalCredits.current}`);
         $(".options").fadeOut();
         $(".container").fadeIn().removeClass("blurAll");
@@ -156,12 +157,11 @@ function App() {
       });
     }
     else if(id==="prev--sem--total--credits"){
-      $(".options").append(`<div class="options--item--headline" >your previous sem total credits?:</div>`)
-      arr.map((item,index)=>{
-        $(".options").append(
-          `<span class="options--item" id="${index}" >${item}</span>`
-        );
-      })
+      $(".options").append(
+        `<div class="options--item--headline" >What is your total Credit points from sem ${1} to sem ${(currSem.current===1)?1:currSem.current-1}:</div>
+         <input id="prev--sem--totalCreditPoints--input" name="pcii" placeholder="XXX" type="text" />
+         <submit id="prevCredit--btn">Enter</submit>`
+      );
     }
     else if(id==="prompt"){
       $(".options").append(
@@ -207,9 +207,7 @@ function App() {
         else{
           let str1=$("#edit3").val();
           if(str1>="A" && str1<="F"){
-            console.log(str1);
             mainObj.current[e].expectedGrade=gradeToPoint[str1];
-            console.log(mainObj.current[e].expectedGrade);
           }
         }
 
@@ -234,16 +232,25 @@ function App() {
     }, 300);
   }
 
+  const calculatePrevTC=(brn,sem)=>{
+    const tempObj=prevTotalCreditsOptions[brn];
+    let res=0;
+    for(let i in tempObj){
+      if(i<sem)res+=tempObj[i];
+    }
+    return res;
+  }
+
   const calculateCpi = ()=>{
     let currTC=0.0;
-    let prevTC=parseFloat(prevTotalCredits.current);
+    let prevTC=prevTotalCredits.current;
     let totalGP=0.0;
     let prevGP=prevTC * parseFloat(prevCpi.current);
     for(let item in mainObj.current){
       currTC+=(parseFloat(mainObj.current[item].credits));
       totalGP+=(parseFloat(mainObj.current[item].credits) * parseFloat(mainObj.current[item].expectedGrade));
     }
-    console.log(currTC,prevTC,totalGP,prevGP)
+    // result 👇
     let currCPI=((prevGP+totalGP)/(prevTC+currTC));
     $("#res").text(`${currCPI.toFixed(2)}`);
     checkForEdit();
