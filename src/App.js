@@ -76,6 +76,9 @@ function App() {
             showPrevCpiPrompt();
           },1000)
         }
+        else{
+          findObj();
+        }
       })
     }, 300);
   };
